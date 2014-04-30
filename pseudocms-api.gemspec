@@ -5,7 +5,7 @@ require 'pseudocms/api/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "pseudocms-api"
-  spec.version       = Pseudocms::API::VERSION
+  spec.version       = PseudoCMS::API::VERSION
   spec.authors       = ["David Muto"]
   spec.email         = ["david.muto@gmail.com"]
   spec.summary       = %q{A ruby library for working with the PseudoCMS API}
