@@ -12,8 +12,22 @@ WebMock.disable_net_connect!
 VCR_FILTERS = [
   :API_EMAIL,
   :API_PASSWORD,
-  :API_ACCESS_TOKEN
+  :API_ACCESS_TOKEN,
+  :API_CLIENT_ID,
+  :API_CLIENT_SECRET
 ]
+
+def load_env(filename = '.env')
+  return unless File.exists?(filename)
+
+  File.foreach(filename) do |line|
+    next if line.chomp.size == 0
+
+    setting = line.split('=')
+    key = setting.shift
+    ENV[key] = setting.join('').chomp
+  end
+end
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
@@ -21,6 +35,8 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.order = 'random'
+
+  load_env
 end
 
 VCR.configure do |vcr|
@@ -52,4 +68,12 @@ end
 
 def test_api_access_token
   ENV.fetch('PSEUDOCMS_TEST_API_ACCESS_TOKEN', 'x' * 40)
+end
+
+def test_api_client_id
+  ENV.fetch('PSEUDOCMS_TEST_API_CLIENT_ID', 'x' * 40)
+end
+
+def test_api_client_secret
+  ENV.fetch('PSEUDOCMS_TEST_API_CLIENT_SECRET', 'x' * 40)
 end
