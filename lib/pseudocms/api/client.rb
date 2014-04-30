@@ -1,3 +1,5 @@
+require "pseudocms/api/client/authorizations"
+
 module PseudoCMS
   module API
     class Client
@@ -7,6 +9,8 @@ module PseudoCMS
         :password,
         :access_token
       ]
+
+      include Authorizations
 
       def initialize(options)
         OPTIONS.each do |key|
