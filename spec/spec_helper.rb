@@ -5,6 +5,8 @@
 
 require 'webmock/rspec'
 require 'vcr'
+require 'pry'
+
 require File.expand_path('../../lib/pseudocms/api', __FILE__)
 
 WebMock.disable_net_connect!
@@ -58,6 +60,10 @@ VCR.configure do |vcr|
   vcr.hook_into :webmock
 end
 
+def blessed_client
+  PseudoCMS::API::Client.new(access_token: test_api_access_token)
+end
+
 def test_api_email
   ENV.fetch('PSEUDOCMS_TEST_API_EMAIL', 'test@user.com')
 end
@@ -76,4 +82,8 @@ end
 
 def test_api_client_secret
   ENV.fetch('PSEUDOCMS_TEST_API_CLIENT_SECRET', 'x' * 40)
+end
+
+def api_url(url)
+  url =~ /^http/ ? url : "#{PseudoCMS::API::API_ENDPOINT}#{url}"
 end
