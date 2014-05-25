@@ -51,11 +51,7 @@ module PseudoCMS
         #   @client = PseudoCMS::API::Client.new(access_token: 'some_token')
         #   @client.create_user(email: 'you@domain.com', password: 'SomePassword')
         def create_user(options)
-          params                   = { user: {} }
-          params[:user][:email]    = options.delete(:email)
-          params[:user][:password] = options.delete(:password)
-
-          request(:post, '/users', params, options)
+          request(:post, '/users', options)
         end
 
         # Update an existing user
@@ -69,13 +65,8 @@ module PseudoCMS
         # @example Update a user's email address
         #   @client = PseudoCMS::API::Client.new(access_token: 'token')
         #   @client.update_user(1, email: 'new@email.com')
-        def update_user(id, options = {})
-          params                   = { user: {} }
-          params[:user][:email]    = options.delete(:email)
-          params[:user][:password] = options.delete(:password)
-          params.delete_if { |key, value| value.nil? || value.empty? }
-
-          request(:patch, "/users/#{id}", params, options)
+        def update_user(id, options)
+          request(:patch, "/users/#{id}", options)
         end
       end
     end
