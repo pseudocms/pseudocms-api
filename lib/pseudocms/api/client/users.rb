@@ -16,7 +16,7 @@ module PseudoCMS
         #   @client = PseudoCMS::API::Client.new(access_token: 'myToken')
         #   @client.users
         def users(options = {})
-          request(:get, '/users', options)
+          get('/users', options)
         end
 
         # Get a specific user
@@ -34,9 +34,9 @@ module PseudoCMS
         #   @client.user(1)
         def user(user_id = nil, options = {})
           if user_id
-            request(:get, "/users/#{user_id}", options)
+            get("/users/#{user_id}", options)
           else
-            request(:get, '/user', options)
+            get('/user', options)
           end
         end
 
@@ -51,7 +51,7 @@ module PseudoCMS
         #   @client = PseudoCMS::API::Client.new(access_token: 'some_token')
         #   @client.create_user(email: 'you@domain.com', password: 'SomePassword')
         def create_user(options)
-          request(:post, '/users', options)
+          post('/users', options)
         end
 
         # Update an existing user
@@ -66,7 +66,7 @@ module PseudoCMS
         #   @client = PseudoCMS::API::Client.new(access_token: 'token')
         #   @client.update_user(1, email: 'new@email.com')
         def update_user(id, options)
-          request(:patch, "/users/#{id}", options)
+          patch("/users/#{id}", options)
         end
       end
     end

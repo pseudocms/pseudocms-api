@@ -38,6 +38,16 @@ module PseudoCMS
 
       private
 
+      OPTIONS.each do |key|
+        send(:define_method, key) { instance_variable_get("@#{key}") }
+      end
+
+      [:get, :post, :patch].each do |method|
+        send(:define_method, method) do |path, options = {}|
+          request(method, path, options)
+        end
+      end
+
       def request(method, path, data, options = {})
         if data.is_a?(Hash)
           options[:query] = data.delete(:query) || {}
@@ -56,9 +66,10 @@ module PseudoCMS
 
       def agent
         @agent ||= Sawyer::Agent.new(API_ENDPOINT, sawyer_options) do |http|
-          http.headers[:accept] = ACCEPT
-          http.headers[:user_agent] = USER_AGENT
+          http.headers[:accept]       = ACCEPT
+          http.headers[:user_agent]   = USER_AGENT
           http.headers[:content_type] = CONTENT_TYPE
+
           http.authorization("Bearer", access_token)
         end
       end
@@ -77,10 +88,6 @@ module PseudoCMS
             user_agent: USER_AGENT
           }
         }
-      end
-
-      OPTIONS.each do |key|
-        send(:define_method, key) { instance_variable_get("@#{key}") }
       end
     end
   end
