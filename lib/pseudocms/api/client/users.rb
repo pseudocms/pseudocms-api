@@ -68,6 +68,17 @@ module PseudoCMS
         def update_user(id, options)
           patch("/users/#{id}", options)
         end
+
+        # Delete an existing user
+        #
+        # @param id [Integer] The id of the user to delete
+        #
+        # @example Delete a user
+        #   @client = PseudoCMS::API::Client.new(access_token: 'token')
+        #   @client.delete_user(2)
+        def delete_user(id)
+          delete("/users/#{id}", {})
+        end
       end
     end
   end

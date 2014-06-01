@@ -42,7 +42,7 @@ module PseudoCMS
         send(:define_method, key) { instance_variable_get("@#{key}") }
       end
 
-      [:get, :post, :patch].each do |method|
+      [:get, :post, :patch, :delete].each do |method|
         send(:define_method, method) do |path, options = {}|
           request(method, path, options)
         end
@@ -61,7 +61,7 @@ module PseudoCMS
         end
 
         @last_response = agent.call(method, URI::Parser.new.escape(path), data, options)
-        last_response.data == " " ? nil : last_response.data
+        [' ', ''].include?(last_response.data) ? nil : last_response.data
       end
 
       def agent

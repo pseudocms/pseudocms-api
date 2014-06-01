@@ -82,10 +82,27 @@ describe PseudoCMS::API::Client::Users do
 
       it 'updates email and password' do
         VCR.use_cassette('user_updated') do
-          user = client.update_user(3, email: 'test@vcr2.com', password: 'newPAssword1')
-          expect(user).to_not be_nil
+          user = client.update_user(4, email: 'test@vcr2.com', password: 'newPAssword1')
+          # 204s do not have a message body
+          # http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+          expect(user).to be_nil
           expect(client.last_response.status).to eql(204)
-          assert_requested :patch, api_url('/users/3')
+          assert_requested :patch, api_url('/users/4')
+        end
+      end
+    end
+  end
+
+  describe "delete user" do
+    context "blessed app" do
+      let(:client) { blessed_client }
+
+      it "deletes the specified user" do
+        VCR.use_cassette('user_deleted') do
+          user = client.delete_user(3)
+          expect(user).to be_nil
+          expect(client.last_response.status).to eql(204)
+          assert_requested :delete, api_url('/users/3')
         end
       end
     end
