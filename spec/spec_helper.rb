@@ -16,7 +16,8 @@ VCR_FILTERS = [
   :API_PASSWORD,
   :API_ACCESS_TOKEN,
   :API_CLIENT_ID,
-  :API_CLIENT_SECRET
+  :API_CLIENT_SECRET,
+  :API_CLIENT_TOKEN
 ]
 
 def load_env(filename = '.env')
@@ -60,8 +61,12 @@ VCR.configure do |vcr|
   vcr.hook_into :webmock
 end
 
-def blessed_client
+def user_client
   PseudoCMS::API::Client.new(access_token: test_api_access_token)
+end
+
+def blessed_client
+  PseudoCMS::API::Client.new(access_token: test_api_client_token)
 end
 
 def test_api_email
@@ -82,6 +87,10 @@ end
 
 def test_api_client_secret
   ENV.fetch('PSEUDOCMS_TEST_API_CLIENT_SECRET', 'x' * 40)
+end
+
+def test_api_client_token
+  ENV.fetch('PSEUDOCMS_TEST_API_CLIENT_TOKEN', 'x' * 40)
 end
 
 def api_url(url)
