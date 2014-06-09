@@ -1,8 +1,17 @@
 require "pseudocms/api/version"
-require "pseudocms/api/client"
 
 module PseudoCMS
   module API
-    # Your code goes here...
+
+    API_ENDPOINT = "http://pseudocms-api.herokuapp.com".freeze
+    ACCEPT       = "application/vnd.pseudocms.v1+json".freeze
+    CONTENT_TYPE = "application/json".freeze
+    USER_AGENT   = "PseudoCMS API Gem #{PseudoCMS::API::VERSION}".freeze
+
+    CONVENIENCE_OPTIONS = {
+      query: [:page, :per_page]
+    }.freeze
   end
 end
+
+require "pseudocms/api/client"
