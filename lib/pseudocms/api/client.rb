@@ -3,6 +3,7 @@ require "pseudocms/api/concerns/authentication"
 require "pseudocms/api/concerns/pagination"
 require "pseudocms/api/concerns/requester"
 require "pseudocms/api/client/users"
+require "pseudocms/api/client/tokens"
 
 module PseudoCMS
   module API
@@ -12,6 +13,7 @@ module PseudoCMS
       include Requester
 
       include Users
+      include Tokens
 
       OPTIONS = [
         :email,

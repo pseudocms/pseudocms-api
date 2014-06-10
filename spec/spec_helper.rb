@@ -69,6 +69,10 @@ def blessed_client
   PseudoCMS::API::Client.new(access_token: test_api_client_token)
 end
 
+def basic_auth_client
+  PseudoCMS::API::Client.new(email: test_api_email, password: test_api_password)
+end
+
 def test_api_email
   ENV.fetch('PSEUDOCMS_TEST_API_EMAIL', 'test@user.com')
 end
