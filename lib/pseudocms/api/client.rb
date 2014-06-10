@@ -41,7 +41,14 @@ module PseudoCMS
           http.headers[:user_agent]   = USER_AGENT
           http.headers[:content_type] = CONTENT_TYPE
 
-          http.authorization("Bearer", access_token)
+          case
+          when basic_authenticated?
+            http.basic_auth(email, password)
+          when token_authenticated?
+            http.authorization("Bearer", access_token)
+          when application_authenticated?
+            http.params = http.params.merge(application_authentication)
+          end
         end
       end
 
