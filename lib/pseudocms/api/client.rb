@@ -1,14 +1,18 @@
 require "sawyer"
+require "pseudocms/api/concerns/authentication"
 require "pseudocms/api/client/users"
 
 module PseudoCMS
   module API
     class Client
+      include Authentication
 
       OPTIONS = [
         :email,
         :password,
-        :access_token
+        :access_token,
+        :client_id,
+        :client_secret
       ]
 
       attr_reader :last_response
@@ -17,14 +21,6 @@ module PseudoCMS
         OPTIONS.each do |key|
           instance_variable_set("@#{key}", options[key])
         end
-      end
-
-      def basic_auth?
-        !!(email && password)
-      end
-
-      def token_auth?
-        !!access_token
       end
 
       # has_first_page?, has_prev_page?, has_next_page?, has_last_page?
