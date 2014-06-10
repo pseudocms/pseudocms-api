@@ -8,6 +8,14 @@ describe PseudoCMS::API::Client do
     its(:basic_authenticated?)       { should be_true }
     its(:token_authenticated?)       { should_not be_true }
     its(:application_authenticated?) { should_not be_true }
+
+    it 'supplies basic auth credentials' do
+      url = 'http://test@user.com:pAssword@pseudocms-api.herokuapp.com'
+      request = stub_request(:get, url)
+
+      subject.send(:get, '/')
+      assert_requested request
+    end
   end
 
   context 'with access token' do
@@ -16,6 +24,14 @@ describe PseudoCMS::API::Client do
     its(:token_authenticated?)       { should be_true }
     its(:basic_authenticated?)       { should_not be_true }
     its(:application_authenticated?) { should_not be_true }
+
+    it 'sends authorization header' do
+      request = stub_request(:get, api_url('/'))
+        .with(headers: { authorization: "Bearer someAccessToken" })
+
+      subject.send(:get, '/')
+      assert_requested request
+    end
   end
 
   context 'with application credentials' do
@@ -24,5 +40,11 @@ describe PseudoCMS::API::Client do
     its(:application_authenticated?) { should be_true }
     its(:basic_authenticated?)       { should_not be_true }
     its(:token_authenticated?)       { should_not be_true }
+
+    it 'sends client id and client secret as parameters' do
+      request = stub_request(:get, api_url('/?client_id=123&client_secret=234454'))
+      subject.send(:get, '/')
+      assert_requested request
+    end
   end
 end
