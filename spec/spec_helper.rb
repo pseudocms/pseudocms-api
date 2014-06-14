@@ -13,6 +13,7 @@ WebMock.disable_net_connect!
 
 VCR_FILTERS = [
   :API_EMAIL,
+  :API_EMAIL_ENCODED,
   :API_PASSWORD,
   :API_ACCESS_TOKEN,
   :API_CLIENT_ID,
@@ -75,6 +76,10 @@ end
 
 def test_api_email
   ENV.fetch('PSEUDOCMS_TEST_API_EMAIL', 'test@user.com')
+end
+
+def test_api_email_encoded
+  test_api_email.sub(/@/, '%40')
 end
 
 def test_api_password
