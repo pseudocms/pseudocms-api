@@ -19,6 +19,8 @@ module PseudoCMS
         #   client = PseudoCMS::API::Client.new(email: 'your@email.com', password: 'pAssword1')
         #   client.create_token(client_id: '123', client_secret: '12334')
         def create_token(options = {})
+          raise AuthMethodError.new("Only basic auth is supported.") unless basic_authenticated?
+
           post('/oauth/token', options.merge({
             grant_type: 'password',
             username: email,

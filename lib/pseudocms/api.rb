@@ -11,6 +11,8 @@ module PseudoCMS
     CONVENIENCE_OPTIONS = {
       query: [:page, :per_page]
     }.freeze
+
+    class AuthMethodError < StandardError; end
   end
 end
 

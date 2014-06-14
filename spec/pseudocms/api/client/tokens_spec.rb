@@ -2,9 +2,17 @@ require 'spec_helper'
 
 describe PseudoCMS::API::Client::Tokens do
 
-  describe "create token", :vcr do
+  describe "create token" do
 
-    context "when using basic auth" do
+    context "when not using basic auth" do
+      let(:client) { user_client }
+
+      it "raises an AuthMethodError" do
+        expect { client.create_token }.to raise_error(PseudoCMS::API::AuthMethodError)
+      end
+    end
+
+    context "when using basic auth", :vcr do
       let(:client) { basic_auth_client }
 
       it "creates a new access token with valid credentials" do
