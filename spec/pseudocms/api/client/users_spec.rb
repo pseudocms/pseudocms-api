@@ -28,8 +28,8 @@ describe PseudoCMS::API::Client::Users, :vcr do
         expect(users).to be_kind_of Array
         assert_requested :get, api_url('/users?page=2&per_page=1')
 
-        expect(client.has_first_page?).to be_true
-        expect(client.has_prev_page?).to be_true
+        expect(client.has_first_page?).to be true
+        expect(client.has_prev_page?).to be true
       end
 
       it "includes links to next and last pages" do
@@ -37,8 +37,8 @@ describe PseudoCMS::API::Client::Users, :vcr do
         expect(users).to be_kind_of Array
         assert_requested :get, api_url('/users?per_page=1')
 
-        expect(client.has_next_page?).to be_true
-        expect(client.has_last_page?).to be_true
+        expect(client.has_next_page?).to be true
+        expect(client.has_last_page?).to be true
       end
     end
   end

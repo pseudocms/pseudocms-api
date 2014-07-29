@@ -10,7 +10,7 @@ module PseudoCMS
         end
 
         send(:define_method, "has_#{rel.to_s}_page?") do
-          last_response && last_response.rels[rel]
+          !!(last_response && last_response.rels[rel])
         end
       end
     end
