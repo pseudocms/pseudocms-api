@@ -8,6 +8,7 @@ require 'vcr'
 require 'pry'
 require 'rspec/its'
 
+Dir["./spec/support/**/*.rb"].each { |file| require file }
 require File.expand_path('../../lib/pseudocms/api', __FILE__)
 
 WebMock.disable_net_connect!
