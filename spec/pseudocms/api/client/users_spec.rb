@@ -15,31 +15,10 @@ describe PseudoCMS::API::Client::Users, :vcr do
     end
 
     context "when called by a blessed app" do
-      let(:client) { blessed_client }
+      let(:client)            { blessed_client }
+      let(:pagination_method) { :users }
 
-      it "returns an array of users" do
-        users = client.users
-        expect(users).to be_kind_of Array
-        assert_requested :get, api_url('/users')
-      end
-
-      it "includes links to prev and first pages" do
-        users = client.users(page: 2, per_page: 1)
-        expect(users).to be_kind_of Array
-        assert_requested :get, api_url('/users?page=2&per_page=1')
-
-        expect(client.has_first_page?).to be true
-        expect(client.has_prev_page?).to be true
-      end
-
-      it "includes links to next and last pages" do
-        users = client.users(per_page: 1)
-        expect(users).to be_kind_of Array
-        assert_requested :get, api_url('/users?per_page=1')
-
-        expect(client.has_next_page?).to be true
-        expect(client.has_last_page?).to be true
-      end
+      it_behaves_like "a paginated resource"
     end
   end
 
