@@ -18,6 +18,19 @@ module PseudoCMS
         def sites(options = {})
           get("/sites", options)
         end
+
+        # Get a site
+        #
+        # @params id [Integer] A site id
+        # @params options [Hash] Optional options
+        # @return [Sawyer::Resource]
+        #
+        # @example Get a site
+        #   @client = PseudoCMS::API::Client.new(access_token: 'some_token')
+        #   @client.site(1)
+        def site(id, options = {})
+          get("/sites/#{id}", options)
+        end
       end
     end
   end
