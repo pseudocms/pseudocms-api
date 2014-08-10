@@ -67,4 +67,55 @@ describe PseudoCMS::API::Client::Sites, :vcr do
       end
     end
   end
+
+  describe "create site" do
+
+    context "when called by a user" do
+      let(:client) { user_client }
+
+      it "creates a new site when given valid options" do
+        site = client.create_site(name: "test site", description: "some test description")
+        expect(site).to_not be_nil
+        expect(client.last_response.status).to eql(201)
+        assert_requested :post, api_url("/sites")
+      end
+
+      it "won't create a site with invalid options" do
+        site = client.create_site(description: "Not going to happen")
+        expect(site.errors).to_not be_nil
+        expect(client.last_response.status).to eql(422)
+      end
+
+      it "won't allow duplicate site names" do
+        site = client.create_site(name: "My Test Site")
+        expect(client.last_response.status).to eql(201)
+
+        dup_site = client.create_site(name: "My Test Site")
+        expect(dup_site.errors).to_not be_nil
+        expect(client.last_response.status).to eql(422)
+      end
+
+      it "ignores the owner_id parameter if supplied" do
+        site = client.create_site(name: "Other user site?", owner_id: -1)
+        expect(site).to_not be_nil
+        expect(site.user_id).to_not eql(-1)
+        expect(client.last_response.status).to eql(201)
+      end
+    end
+
+    context "when called by a blessed app" do
+      let(:client) { blessed_client }
+
+      it "creates a site for the specified owner" do
+        site = client.create_site(name: "Your Site", owner_id: 2)
+        expect(site).to_not be_nil
+        expect(client.last_response.status).to eql(201)
+      end
+
+      it "requires a valid owner_id to create a site" do
+        site = client.create_site(name: "Some Other Site")
+        expect(client.last_response.status).to eql(404)
+      end
+    end
+  end
 end

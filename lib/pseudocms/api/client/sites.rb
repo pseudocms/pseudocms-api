@@ -31,6 +31,19 @@ module PseudoCMS
         def site(id, options = {})
           get("/sites/#{id}", options)
         end
+
+        # Create a new site
+        #
+        # @params options [Hash] options
+        # @option options [String] :name A name for the site
+        # @option options [String] :description (nil) A description of the site
+        #
+        # @example Create a new site
+        #   @client = PseudoCMS::API::Client.new(access_token: 'some_token')
+        #   @client.create_site(name: "My Site", description: "Optional description")
+        def create_site(options = {})
+          post("/sites", options)
+        end
       end
     end
   end
