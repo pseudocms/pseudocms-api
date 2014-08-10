@@ -41,8 +41,22 @@ module PseudoCMS
         # @example Create a new site
         #   @client = PseudoCMS::API::Client.new(access_token: 'some_token')
         #   @client.create_site(name: "My Site", description: "Optional description")
-        def create_site(options = {})
+        def create_site(options)
           post("/sites", options)
+        end
+
+        # Update a site
+        #
+        # @params id [Integer] The site to update
+        # @params options [Hash] Attributes to be updated
+        # @option options [String] The name of the site
+        # @option options [String] The description
+        #
+        # @example
+        #   client = PseudoCMS::API::Client.new(access_token: 'some_token')
+        #   client.update_site(1, name: "New Name", description: "New Description")
+        def update_site(id, options)
+          patch("/sites/#{id}", options)
         end
       end
     end

@@ -118,4 +118,52 @@ describe PseudoCMS::API::Client::Sites, :vcr do
       end
     end
   end
+
+  describe "update site" do
+    let(:helper) { APIHelper.new(client) }
+
+    it "returns a 404 when the site cannot be found" do
+      client = blessed_client
+      client.update_site(0, name: "Valid name")
+      expect(client.last_response.status).to eql(404)
+    end
+
+    context "when called by a user" do
+      let(:client) { user_client }
+
+      it "updates the specified attributes" do
+        site = helper.ensure_site(name: "Original name", description: "First description")
+
+        client.update_site(site.id, name: "Updated name", description: "Second desc")
+        expect(client.last_response.status).to eql(204)
+        assert_requested :patch, api_url("/sites/#{site.id}")
+      end
+
+      it "fails with missing attributes" do
+        site = helper.ensure_site(name: "Original name", description: "First description")
+
+        client.update_site(site.id, name: "")
+        expect(client.last_response.status).to eql(422)
+      end
+
+      it "wont allow duplicate names" do
+        first_site   = helper.ensure_site(name: "Its My Name")
+        second_site  = helper.ensure_site(name: "Or is it?")
+
+        client.update_site(second_site.id, name: "Its My Name")
+        expect(client.last_response.status).to eql(422)
+      end
+    end
+
+    context "when called by a blessed app" do
+      let(:client) { blessed_client }
+
+      it "can update a site" do
+        site = helper.ensure_site(name: "Blessed Site", owner_id: 2)
+
+        client.update_site(site.id, name: "Updated blessed site")
+        expect(client.last_response.status).to eql(204)
+      end
+    end
+  end
 end
