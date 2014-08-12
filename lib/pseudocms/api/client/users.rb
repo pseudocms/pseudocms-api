@@ -72,12 +72,13 @@ module PseudoCMS
         # Delete an existing user
         #
         # @param id [Integer] The id of the user to delete
+        # @param options [Hash] Optional options
         #
         # @example Delete a user
         #   @client = PseudoCMS::API::Client.new(access_token: 'token')
         #   @client.delete_user(2)
-        def delete_user(id)
-          delete("/users/#{id}", {})
+        def delete_user(id, options = {})
+          delete("/users/#{id}", options)
         end
       end
     end

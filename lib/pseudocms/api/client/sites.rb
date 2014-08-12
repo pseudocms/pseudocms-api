@@ -21,8 +21,8 @@ module PseudoCMS
 
         # Get a site
         #
-        # @params id [Integer] A site id
-        # @params options [Hash] Optional options
+        # @param id [Integer] A site id
+        # @param options [Hash] Optional options
         # @return [Sawyer::Resource]
         #
         # @example Get a site
@@ -34,7 +34,7 @@ module PseudoCMS
 
         # Create a new site
         #
-        # @params options [Hash] options
+        # @param options [Hash] options
         # @option options [String] :name A name for the site
         # @option options [String] :description (nil) A description of the site
         #
@@ -47,8 +47,8 @@ module PseudoCMS
 
         # Update a site
         #
-        # @params id [Integer] The site to update
-        # @params options [Hash] Attributes to be updated
+        # @param id [Integer] The site to update
+        # @param options [Hash] Attributes to be updated
         # @option options [String] The name of the site
         # @option options [String] The description
         #
@@ -57,6 +57,18 @@ module PseudoCMS
         #   client.update_site(1, name: "New Name", description: "New Description")
         def update_site(id, options)
           patch("/sites/#{id}", options)
+        end
+
+        # Delete a site
+        #
+        # @param id [Integer] The site to delete
+        # @param options [Hash] Optional options
+        #
+        # @example
+        #   client = PseudoCMS::API::Client.new(access_token: 'some_token')
+        #   client.delete_site(1)
+        def delete_site(id, options = {})
+          delete("/sites/#{id}", options)
         end
       end
     end

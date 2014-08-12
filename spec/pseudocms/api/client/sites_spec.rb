@@ -166,4 +166,37 @@ describe PseudoCMS::API::Client::Sites, :vcr do
       end
     end
   end
+
+  describe "delete" do
+    let(:helper) { APIHelper.new(client) }
+
+    it "returns a 404 when the site cannot be found" do
+      client = blessed_client
+      client.delete_site(0)
+      expect(client.last_response.status).to eql(404)
+    end
+
+    context "when called by a user" do
+      let(:client) { user_client }
+
+      it "can delete a site owned by this user" do
+        site = helper.ensure_site(name: "site to be deleted")
+
+        client.delete_site(site.id)
+        expect(client.last_response.status).to eql(204)
+        assert_requested :delete, api_url("/sites/#{site.id}")
+      end
+    end
+
+    context "when called by a blessed app" do
+      let(:client) { blessed_client }
+
+      it "can delete any site" do
+        site = helper.ensure_site(name: "To be deleted by a blessed app", owner_id: 2)
+
+        client.delete_site(site.id)
+        expect(client.last_response.status).to eql(204)
+      end
+    end
+  end
 end
